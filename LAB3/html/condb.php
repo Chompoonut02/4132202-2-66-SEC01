@@ -7,7 +7,7 @@ $db = "internet";
 
 try{
     $conn = mysqli_connect($host,$username,$password,$db);
-    mysqli_query($conn,"SET NAME utf8");
+    mysqli_query($conn,"SET NAMES utf8");
 }
 catch(Exception $e){
     $error = $e->getMessage();
