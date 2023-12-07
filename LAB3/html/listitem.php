@@ -7,15 +7,17 @@ $result = mysqli_query($conn, $sql);
 // var_dump($result);
 ?>
 
-<button id="btn_add"> + Add </button>
-
-<table>
+<button
+    id="btn_add"
+    class= "btn btn-primary"
+    data-bs-toggle="modal" 
+    data-bs-target="#staticBackdrop"> + Add </button>
+<table class= "table table-striped table-hover">
     <thead>
         <tr>
             <th>ID</th>
             <th>Name</th>
             <th>Province</th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -27,6 +29,8 @@ $result = mysqli_query($conn, $sql);
                 <td><?= $row["name"] ?></td>
                 <td><?= $row["id_province"] ?></td>
                 <td><button class="btn_del" data-id="<?= $row["id_member"] ?>"> DEL </button></td>
+                <td><button class="btn_edit" data-id="<?= $row["id_member"] ?>" data-bs-toggle="modal" 
+    data-bs-target="#staticBackdrop"> EDIT </button></td>
             </tr>
         <?php
         }
@@ -35,9 +39,10 @@ $result = mysqli_query($conn, $sql);
 </table>
 
 <script>
-    $(".btn_del").click(function() {
+    $(".btn_del").click(function(){
         let id = $(this).data("id");
         console.log(id);
+
 
         $.ajax({
             url:"/delitem.php",
@@ -45,17 +50,26 @@ $result = mysqli_query($conn, $sql);
             data:{
                 id_mem: id
             },
-            success:function(rep) {
+            success: function(res) {
                 console.log(res);
-                if(res == "error")
-                    alert("Can't delete item.");
+                if(res =="error")
+                   alert("Can't delete item.");
                 else
-                    $("#div_item").load("/listitem.php");
+                $("#div_item").load("/listitem.php");
             }
         });
     });
 
     $("#btn_add").click(function(){
-        $("#div_item").load("/addform.php");
+        //$("#div_item").load("/addform.php");
+        $("#staticBackdropLabel").text("Add Item");
+        $(".modal-body").load("/addform.php");
+        $(".modal-footer").hide();
+    })
+    $(".btn_edit").click(function(){
+        let id = $(this).data("id");
+        $("#staticBackdropLabel").text("Edit Item");
+        $(".modal-body").load(`/editform.php?id=${id}`);
+        $(".modal-footer").hide();
     });
 </script>
